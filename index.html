@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cube 3D Vidéos Parlantes</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #111;
+      perspective: 1200px;
+      color: white;
+      font-family: Arial, sans-serif;
+      flex-direction: column;
+    }
+
+    .cube-container {
+      width: 400px;
+      height: 400px;
+      position: relative;
+    }
+
+    .cube {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      transform-style: preserve-3d;
+      animation: rotate 20s infinite linear;
+    }
+
+    .face {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      overflow: hidden;
+      border: 2px solid #fff;
+      background: #000;
+    }
+
+    .face video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      cursor: pointer;
+    }
+
+    .front  { transform: rotateY(0deg) translateZ(200px); }
+    .back   { transform: rotateY(180deg) translateZ(200px); }
+    .right  { transform: rotateY(90deg) translateZ(200px); }
+    .left   { transform: rotateY(-90deg) translateZ(200px); }
+    .top    { transform: rotateX(90deg) translateZ(200px); }
+    .bottom { transform: rotateX(-90deg) translateZ(200px); }
+
+    @keyframes rotate {
+      from { transform: rotateX(0deg) rotateY(0deg); }
+      to   { transform: rotateX(360deg) rotateY(360deg); }
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background: #28a745;
+      cursor: pointer;
+      color: white;
+    }
+    button:hover {
+      background: #218838;
+    }
+  </style>
+</head>
+<body>
+  <div class="cube-container">
+    <div class="cube" id="cube">
+      <div class="face front"><video src="WhatsApp Vidéo 2025-07-22 à 08.26.49_4220f3da.mp4" autoplay muted loop></video></div>
+      <div class="face back"><video src="WhatsApp Vidéo 2025-07-22 à 08.26.54_a4ed187b.mp4" autoplay muted loop></video></div>
+      <div class="face right"><video src="WhatsApp Vidéo 2025-07-26 à 21.27.28_043e0367.mp4" autoplay muted loop></video></div>
+      <div class="face left"><video src="WhatsApp Vidéo 2025-07-22 à 08.26.55_031e58f7.mp4" autoplay muted loop></video></div>
+      <div class="face top"><video src="WhatsApp Vidéo 2025-07-22 à 08.26.59_dda44092.mp4" autoplay muted loop></video></div>
+      <div class="face bottom"><video src="WhatsApp Vidéo 2025-07-22 à 13.00.36_304e7f65.mp4" autoplay muted loop></video></div>
+    </div>
+  </div>
+
+  <button id="rotationToggle">⏯ Pause/Play Rotation</button>
+
+<script>
+  const cube = document.getElementById("cube");
+  const videos = document.querySelectorAll("video");
+  const rotationBtn = document.getElementById("rotationToggle");
+  let isRotating = true;
+
+  // ✅ Rotation toggle
+  rotationBtn.addEventListener("click", toggleRotation);
+  document.addEventListener("keydown", (e) => {
+    if (e.code === "Space") toggleRotation();
+  });
+
+  function toggleRotation(){
+    cube.style.animationPlayState = isRotating ? "paused" : "running";
+    isRotating = !isRotating;
+  }
+
+  // ✅ Quand on clique une vidéo → son activé, autres muettes
+  videos.forEach(video => {
+    video.addEventListener("click", () => {
+      videos.forEach(v => v.muted = true);
+      video.muted = false;
+      video.play();
+    });
+  });
+
+  // ✅ Quand une vidéo est lue → silence aux autres
+  videos.forEach(video => {
+    video.addEventListener("play", () => {
+      videos.forEach(v => {
+        if (v !== video) {
+          v.muted = true;
+        }
+      });
+      video.muted = false;
+    });
+  });
+</script>
+</body>
+</html>
